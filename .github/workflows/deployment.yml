@@ -15,7 +15,7 @@ jobs:
       - name: Using config.sh
         env:
            NAME_DB: ${{ secrets.FUNCTION_NAME }}
-           RUNTIME: "go.1.20"
+           RUNTIME: "go.1.21.0"
         run: |
              chmod +x ./lambda-function.tf
              ./config.sh
