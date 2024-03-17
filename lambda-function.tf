@@ -1,17 +1,13 @@
 provider "aws" {
-  region = "us-east-1" // substitua pela região desejada
+  region = "us-east-1"
 }
 
 resource "aws_lambda_function" "minha_funcao_lambda" {
-  function_name = "minha-funcao-lambda" // substituir pelo nosso nome da funcao #? user secrets?
+  function_name = "{{FUNCTION_NAME}}"
   handler       = "index.handler"
-  runtime       = "nodejs14.x" // substituir pelo runtime desejado
+  runtime       = "{{RUNTIME}}"
   timeout       = 60 // tempo limite em segundos
   memory_size   = 128 // tamanho da memória em MB
-
-  // Código da função
-  filename      = "caminho/para/o/arquivo.zip" // mudar para o nosso caminho #? user secrets?
-  source_code_hash = filebase64sha256("caminho/para/o/arquivo.zip")
 
   // Permissões para invocar a função
   role = aws_iam_role.lambda_exec_role.arn
