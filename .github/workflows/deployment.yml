@@ -1,0 +1,44 @@
+name: Deploy Terraform
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: [self-hosted, linux, x64]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+    #   - name: Using config.sh
+    #     env:
+    #       NAME_DB: ${{ secrets.NAME_DB }}
+    #       USERNAME_DB: ${{ secrets.USERNAME_DB }}
+    #       PASSWORD_DB: ${{  secrets.PASSWORD_DB}}
+    #       NAME_GROUP: ${{ secrets.NAME_GROUP }}
+    #       VPC_ID: ${{ secrets.VPC_ID }}
+    #       DB_FROM_PORT: ${{ secrets.DB_FROM_PORT }}
+    #       DB_TO_PORT: ${{ secrets.DB_TO_PORT }}
+    #     run: |
+    #         chmod +x ./db.tf
+    #         ./config.sh
+        
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2.0.3
+        with:
+          terraform_wrapper: false
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve
